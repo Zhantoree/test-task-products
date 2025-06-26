@@ -1,13 +1,36 @@
 'use client'
 
-import {createContext, useContext, useState} from "react";
+import {createContext, Dispatch, ReactNode, SetStateAction, useContext, useState} from "react";
 
-export const CartContext = createContext([])
+interface CartContextType {
+    cart: {
+        [key: string]: number
+    }
+    setCart: Dispatch<SetStateAction<{
+        [key: string]: number
+    }>>;
+}
 
-const CartProvider = ({ children }) => {
-    const [cart, setCart] = useState([])
 
+export const CartContext = createContext<CartContextType | undefined>(undefined);
+
+
+export const CartProvider = ({children}: { children: ReactNode }) => {
+    const [cart, setCart] = useState<{[key: string]: number}>({})
+
+
+    const contextValue: CartContextType = {
+        cart, setCart
+    };
     return (
-        <CartContext.Provider> </CartContext.Provider>
+        <CartContext.Provider value={contextValue}>
+            {children}
+        </CartContext.Provider>
     )
 }
+
+export const useCart = () => {
+    const ctx = useContext(CartContext);
+    if (!ctx) throw new Error("useCart должен использоваться в CartProvider");
+    return ctx;
+};

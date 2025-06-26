@@ -1,3 +1,6 @@
+'use client'
+
+import sanitizeHtml from 'sanitize-html';
 import React, { useCallback, useEffect, useState } from 'react'
 import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
@@ -7,18 +10,20 @@ import {
   PrevButton,
   usePrevNextButtons
 } from './EmblaCarouselArrowButtons'
+import './embla.css'
+import {Review} from "@/models/review";
+
 
 type PropType = {
-  slides: number[]
   options?: EmblaOptionsType
+  reviews: Review[]
 }
 
-const EmblaCarousel: React.FC<PropType> = (props) => {
-  const { slides, options } = props
+const EmblaCarousel: React.FC<PropType> = ({options, reviews}) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
-    AutoScroll({ playOnInit: false })
+    AutoScroll({ playOnInit: true, speed: 1 })
   ])
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
 
   const {
     prevBtnDisabled,
@@ -63,15 +68,18 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       .on('autoScroll:stop', () => setIsPlaying(false))
       .on('reInit', () => setIsPlaying(autoScroll.isPlaying()))
   }, [emblaApi])
+  const sanitizedReviews = reviews.map(review => ({
+    ...review,
+    text: sanitizeHtml(review.text)
+  }))
 
   return (
     <div className="embla">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map((index) => (
-            <div className="embla__slide" key={index}>
-              <div className="embla__slide__number">
-                <span>{index + 1}</span>
+          {sanitizedReviews.map((review) => (
+            <div className="embla__slide" key={review?.id}>
+              <div className="embla__slide__content" dangerouslySetInnerHTML={{__html: review?.text}}>
               </div>
             </div>
           ))}
