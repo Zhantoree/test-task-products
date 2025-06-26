@@ -16,5 +16,6 @@ export interface Product {
     title: string,
     description: string,
     price: number,
-    amount?: number,
 }
+
+export type CartItem = Product & { amount: number };

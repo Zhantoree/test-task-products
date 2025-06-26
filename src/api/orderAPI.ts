@@ -8,6 +8,6 @@ export const createOrder = async (body: CreateOrderRequest): Promise<CreateOrder
         return res.data
     } catch (e) {
         console.error(e)
-        throw new Error('Ошибка при создании заказа')
+        return {success: 0}
     }
 }

@@ -1,5 +1,5 @@
 import {fetchProducts} from "@/action/actions";
-import {ProductList} from "@/components/ProductList/index";
+import {ProductList} from "@/components/ProductList/ProductList";
 import {CartProvider} from "@/providers/CartProvider";
 
 export async function ProductListWrapper () {

@@ -23,7 +23,7 @@ const EmblaCarousel: React.FC<PropType> = ({options, reviews}) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
     AutoScroll({ playOnInit: true, speed: 1 })
   ])
-  const [isPlaying, setIsPlaying] = useState(true)
+  const [isPlaying, setIsPlaying] = useState<boolean>(true)
 
   const {
     prevBtnDisabled,
